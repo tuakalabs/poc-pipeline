@@ -1,0 +1,17 @@
+ARG SERVICE_DIR
+
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+WORKDIR /app
+
+# Copy and restore the service project
+COPY "${SERVICE_DIR}/*.csproj" "./service/"
+RUN dotnet restore "./service/*.csproj"
+
+# Copy and build the service
+COPY "${SERVICE_DIR}/" "./service/"
+RUN dotnet publish "./service/*.csproj" -c Release -o /app/publish
+
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS runtime
+WORKDIR /app
+COPY --from=build /app/publish .
+ENTRYPOINT ["dotnet", "service.dll"]

@@ -19,10 +19,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Build .NET for ${{ matrix.service }}
+        run: dotnet build
+        working-directory: ./backend/Services/${{ matrix.service }}
+
+      - name: Test .NET for ${{ matrix.service }}
+        run: dotnet test --no-restore --verbosity normal
+        working-directory: ./backend/Services/${{ matrix.service }}
+
       - name: Build Docker image for ${{ matrix.service }}
         run: |
-          SERVICE_PATH=backend/Services/${{ matrix.service }}
-          IMAGE_NAME=${{ matrix.service }}
-          echo "Building Docker image for $SERVICE_PATH"
-          # docker build -t my-registry/$IMAGE_NAME:latest $SERVICE_PATH
+          ./docker-build.sh ${{ matrix.service }}
           # docker push my-registry/$IMAGE_NAME:latest
+        working-directory: ./docker
