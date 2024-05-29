@@ -72,14 +72,39 @@ jobs:
           echo "Changed files: $changed_files"
 
           # Extract service names from the paths
-          changed_services=$(echo "$changed_files" | tr ' ' '\n' | awk -F'/' '{print $3}' | sort -u)
+          changed_services=$(echo "$changed_files" | tr ' ' ',' | awk -F'/' '{print $3}' | sort -u)
 
           if [ -z "$changed_services" ]; then
             echo "No services changed."
-            changed_services="[]"
           else
             echo "Changed services: $changed_services"
-            changed_services=$(echo "$changed_services" | jq -R -s -c 'split("\n")[:-1]')
           fi
 
           echo "services=$changed_services" >> $GITHUB_ENV
+
+  build-docker-images:
+    needs: detect-changes
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service: ${{ fromJson(needs.detect-changes.outputs.services) }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build Docker image for ${{ matrix.service }}
+        run: |
+          SERVICE_PATH=backend/Services/${{ matrix.service }}
+          IMAGE_NAME=${{ matrix.service }}
+          echo "Building Docker image for $SERVICE_PATH"
+          docker build -t my-registry/$IMAGE_NAME:latest $SERVICE_PATH
+          docker push my-registry/$IMAGE_NAME:latest
+
+  run-tests:
+    needs: build-docker-images
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run tests
+        run: |
+          echo "Running tests after all Docker builds have completed."
+          # Add your test commands here
