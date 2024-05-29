@@ -79,7 +79,8 @@ jobs:
           fi
 
           echo "Changed services: $changed_services"
-          echo "services=$changed_services" >> $GITHUB_ENV
+          # echo "services=$changed_services" >> $GITHUB_ENV
+          echo "::set-output name=services::$changed_services"
 
   build-docker-images:
     name: "Build Docker Images"
@@ -87,7 +88,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        service: ${{ fromJson(env.services) }}
+        service: ${{ fromJson(needs.detect-changes.outputs.services) }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
