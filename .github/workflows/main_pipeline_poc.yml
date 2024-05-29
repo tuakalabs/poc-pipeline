@@ -82,23 +82,9 @@ jobs:
           # echo "services=$changed_services" >> $GITHUB_ENV
           echo "::set-output name=services::$changed_services"
 
-  build-docker-images:
-    name: "Trigger Build Docker Images Workflow"
-    runs-on: ubuntu-latest
+  build-images:
+    name: Build Docker Images
     needs: detect-changes
-    steps:
-      - name: Trigger Build Docker Images Workflow
-        uses: actions/github-script@v5
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const services = JSON.stringify(${{ toJson(needs.detect-changes.outputs.services) }});
-            await github.actions.createWorkflowDispatch({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              workflow_file: '.github/workflows/build_pipeline_poc.yml',
-              ref: context.ref,
-              inputs: {
-                services: services
-              }
-            });
+    uses: ./.github/workflows/build_pipeline_poc.yml
+    with:
+      services: ${{ needs.detect-changes.outputs.services }}

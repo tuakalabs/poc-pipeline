@@ -1,10 +1,16 @@
-name: Build Docker Images
+name: Build Pipeline POC
+
 on:
-  workflow_dispatch:
+  # workflow_dispatch:
+  #   inputs:
+  #     services:
+  #       description: "List of services to build Docker images for"
+  #       required: true
+  workflow_call:
     inputs:
       services:
-        description: "List of services to build Docker images for"
         required: true
+        type: string
 
 jobs:
   build-docker-images:
@@ -13,6 +19,7 @@ jobs:
     strategy:
       matrix:
         service: ${{ fromJson(inputs.services) }}
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
