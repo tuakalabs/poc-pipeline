@@ -1,16 +1,17 @@
 name: Main Pipeline POC
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - "backend/Services/**"
-  pull_request:
-    branches:
-      - main
-    paths:
-      - "backend/Services/**"
+  workflow_dispatch:
+  # push:
+  #   branches:
+  #     - main
+  #   paths:
+  #     - "backend/Services/**"
+  # pull_request:
+  #   branches:
+  #     - main
+  #   paths:
+  #     - "backend/Services/**"
 
 jobs:
   setup:
@@ -83,22 +84,29 @@ jobs:
           echo "::set-output name=services::$changed_services"
 
   build-docker-images:
-    name: "Trigger Build Docker Images Workflow"
-    runs-on: ubuntu-latest
+    name: "Build Docker Images"
     needs: detect-changes
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service: ${{ fromJson(needs.detect-changes.outputs.services) }}
     steps:
-      - name: Trigger Build Docker Images Workflow
-        uses: actions/github-script@v5
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const services = ${{ toJson(needs.detect-changes.outputs.services) }};
-            await github.actions.createWorkflowDispatch({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              workflow_file: '.github/workflows/build_pipeline_poc.yml',
-              ref: context.ref,
-              inputs: {
-                services: services.join('\n')
-              }
-            });
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build Docker image for ${{ matrix.service }}
+        run: |
+          SERVICE_PATH=backend/Services/${{ matrix.service }}
+          IMAGE_NAME=${{ matrix.service }}
+          echo "Building Docker image for $SERVICE_PATH"
+          # docker build -t my-registry/$IMAGE_NAME:latest $SERVICE_PATH
+          # docker push my-registry/$IMAGE_NAME:latest
+
+  # run-tests:
+  #   needs: build-docker-images
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Run tests
+  #       run: |
+  #         echo "Running tests after all Docker builds have completed."
+  #         # Add your test commands here

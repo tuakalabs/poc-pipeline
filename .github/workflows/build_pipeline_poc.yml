@@ -1,0 +1,26 @@
+name: Build Docker Images
+on:
+  workflow_dispatch:
+    inputs:
+      services:
+        description: "List of services to build Docker images for"
+        required: true
+
+jobs:
+  build-docker-images:
+    name: "Build Docker Images"
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service: ${{ fromJson(inputs.services) }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build Docker image for ${{ matrix.service }}
+        run: |
+          SERVICE_PATH=backend/Services/${{ matrix.service }}
+          IMAGE_NAME=${{ matrix.service }}
+          echo "Building Docker image for $SERVICE_PATH"
+          # docker build -t my-registry/$IMAGE_NAME:latest $SERVICE_PATH
+          # docker push my-registry/$IMAGE_NAME:latest
