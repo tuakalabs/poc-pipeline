@@ -1,12 +1,15 @@
 name: Main Pipeline POC
 
 on:
-  push:
+  pull_request:
     branches:
       - main
+    paths:
+      - "backend/Services/**"
 
 jobs:
-  build:
+  setup:
+    name: "Setup Pipeline"
     runs-on: ubuntu-latest
 
     steps:
@@ -37,3 +40,27 @@ jobs:
 
       - name: Display version
         run: echo ${{ steps.gitversion.outputs.semVer }}
+
+  detect-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      services: ${{ steps.filter.outputs.services }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Filter changed files
+        id: filter
+        uses: dorny/paths-filter@v2
+        with:
+          filters: |
+            services:
+              - 'backend/Services/**'
+
+      - name: Set changed services output
+        id: set-changed-services
+        run: |
+          # Extract the list of unique service directories that have changes
+          changed_services=$(echo "${{ steps.filter.outputs.services }}" | grep -oP 'backend/Services/[^/]+/' | sort -u)
+          echo "Changed services: $changed_services"
+          echo "::set-output name=services::$(echo $changed_services | jq -R -s -c 'split("\n")[:-1]')"
