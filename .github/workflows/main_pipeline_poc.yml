@@ -66,8 +66,14 @@ jobs:
       - name: Set changed services output
         id: set-changed-services
         run: |
-          # Extract the list of service directories that have changes
-          changed_services=$(echo "${{ steps.filter.outputs.services }}" | grep -oP 'backend/Services/[^/]+' | sort -u | xargs -n 1 basename)
+          # Extract the list of unique service directories that have changes
+          changed_files="${{ steps.filter.outputs.services }}"
+          echo "Changed files: $changed_files"
+
+          if [ -n "$changed_files" ]; then
+            changed_services=$(echo "$changed_files" | grep -oP 'backend/Services/[^/]+' | sort -u | xargs -n 1 basename)
+          fi
+
           if [ -z "$changed_services" ]; then
             echo "No services changed."
             changed_services="[]"
@@ -75,4 +81,5 @@ jobs:
             echo "Changed services: $changed_services"
             changed_services=$(echo "$changed_services" | jq -R -s -c 'split("\n")[:-1]')
           fi
+
           echo "::set-output name=services::$changed_services"
