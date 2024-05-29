@@ -1,5 +1,3 @@
-#!/bin/bash
-
 base_dir="backend/Services"
 
 # Check if the service name argument is provided
