@@ -47,9 +47,10 @@ jobs:
         run: echo ${{ steps.gitversion.outputs.semVer }}
 
   detect-changes:
+    name: Detecting Changes
     runs-on: ubuntu-latest
     outputs:
-      services: ${{ steps.filter.outputs.services }}
+      services: ${{ steps.set-changed-services.outputs.services }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -66,6 +67,6 @@ jobs:
         id: set-changed-services
         run: |
           # Extract the list of unique service directories that have changes
-          changed_services=$(echo "${{ steps.filter.outputs.services }}" | grep -oP 'backend/Services/[^/]+/' | sort -u)
+          changed_services=$(echo "${{ steps.filter.outputs.services }}" | grep -oP 'backend/Services/[^/]+' | sort -u | xargs -n 1 basename)
           echo "Changed services: $changed_services"
           echo "::set-output name=services::$(echo $changed_services | jq -R -s -c 'split("\n")[:-1]')"
