@@ -17,6 +17,11 @@ fi
 
 # Build the Docker image for the specified service
 docker build -t "tuakalabs01/pocapp:$service_name" \
-    --build-arg SERVICE_DIR="$service_dir" \
+    --build-arg SERVICE_DIR="./backend/Services/$service_name" \
     -f Dockerfile.service \
     .
+
+# docker build -t "tuakalabs01/pocapp:$service_name" \
+#     --build-arg SERVICE_DIR="$service_dir" \
+#     -f Dockerfile.service \
+#     .
