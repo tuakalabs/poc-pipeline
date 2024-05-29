@@ -80,6 +80,7 @@ jobs:
             changed_services="[]"
           fi
 
+          echo "$changed_services"
           echo "services=$changed_services" >> $GITHUB_ENV
 
   # build-docker-images:
