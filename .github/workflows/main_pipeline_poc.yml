@@ -72,7 +72,7 @@ jobs:
           echo "Changed files: $changed_files"
 
           # Extract service names from the paths
-          changed_services=$(echo "$changed_files" | tr ' ' ',' | awk -F'/' '{print $3}' | sort -u)
+          changed_services=$(echo "$changed_files" | awk -F'/' '{print $3}' | sort -u | awk '{print $1}' | tr '\n' ',' | sed 's/,$//')
 
           if [ -z "$changed_services" ]; then
             echo "No services changed."
