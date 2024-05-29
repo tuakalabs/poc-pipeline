@@ -72,7 +72,8 @@ jobs:
           echo "Changed files: $changed_files"
 
           if [ -n "$changed_files" ] && [ "$changed_files" != "null" ]; then
-            changed_services=$(echo "$changed_files" | awk -F'/' '{print $3}' | sort -u)
+            # Extract service names from the paths
+            changed_services=$(echo "$changed_files" | jq -r 'map(split("/")[2]) | unique | .[]')
           else
             changed_services=""
           fi
