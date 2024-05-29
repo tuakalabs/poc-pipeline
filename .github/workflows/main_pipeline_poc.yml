@@ -89,6 +89,6 @@ jobs:
     name: Build Docker Images
     if: ${{ contains(github.event.pull_request.labels.*.name, 'submit') && needs.detect-changes.outputs.services != '[]' }}
     needs: detect-changes
-    uses: ./.github/workflows/build_pipeline_poc.yml
+    uses: ./.github/workflows/container_build_pipeline_poc.yml
     with:
       services: ${{ needs.detect-changes.outputs.services }}

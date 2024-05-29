@@ -1,4 +1,4 @@
-name: Build Pipeline POC
+name: Container Build Pipeline POC
 
 on:
   workflow_call:
@@ -9,7 +9,7 @@ on:
 
 jobs:
   build-docker-images:
-    name: "Build Docker Images"
+    name: "Container Build Docker Images"
     runs-on: ubuntu-latest
     strategy:
       matrix:
