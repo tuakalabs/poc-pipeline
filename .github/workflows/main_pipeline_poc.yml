@@ -92,13 +92,13 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const services = ${{ toJson(needs.detect-changes.outputs.services) }};
+            const services = JSON.stringify(${{ toJson(needs.detect-changes.outputs.services) }});
             await github.actions.createWorkflowDispatch({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              workflow_file: '.github/workflows/build_pipeline_poc.yml',
+              workflow_file: '.github/workflows/build.yml',
               ref: context.ref,
               inputs: {
-                services: services.join('\n')
+                services: services
               }
             });
