@@ -1,3 +1,5 @@
+#!/bin/bash
+
 base_dir="../backend/Services"
 
 # Check if the service name argument is provided
@@ -17,11 +19,7 @@ fi
 
 # Build the Docker image for the specified service
 docker build -t "tuakalabs01/pocapp:$service_name" \
-    --build-arg SERVICE_DIR="./$service_name" \
+    --build-arg SERVICE_NAME="$service_name" \
+    --build-arg SERVICE_DIR="$service_dir" \
     -f Dockerfile.service \
     .
-
-# docker build -t "tuakalabs01/pocapp:$service_name" \
-#     --build-arg SERVICE_DIR="$service_dir" \
-#     -f Dockerfile.service \
-#     .
