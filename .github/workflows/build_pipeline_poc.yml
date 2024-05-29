@@ -1,11 +1,6 @@
 name: Build Pipeline POC
 
 on:
-  # workflow_dispatch:
-  #   inputs:
-  #     services:
-  #       description: "List of services to build Docker images for"
-  #       required: true
   workflow_call:
     inputs:
       services:
