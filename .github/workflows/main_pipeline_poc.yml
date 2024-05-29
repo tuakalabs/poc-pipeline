@@ -96,7 +96,7 @@ jobs:
             await github.actions.createWorkflowDispatch({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              workflow_file: '.github/workflows/build.yml',
+              workflow_file: '.github/workflows/build_pipeline_poc.yml',
               ref: context.ref,
               inputs: {
                 services: services
