@@ -59,13 +59,14 @@ jobs:
         id: filter
         uses: dorny/paths-filter@v3
         with:
+          list-files: json
           filters: |
             services:
               - 'backend/Services/**'
 
       - name: Debug filter output
         run: |
-          echo "Filter output: ${{ steps.filter.outputs.services_files }}"
+          echo "Filter JSON output: ${{ steps.filter.outputs.services_files }}"
 
       - name: Set changed services output
         id: set-changed-services
