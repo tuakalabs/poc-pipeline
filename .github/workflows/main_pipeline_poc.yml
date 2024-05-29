@@ -64,19 +64,16 @@ jobs:
             services:
               - 'backend/Services/**'
 
-      - name: Debug filter output
-        run: |
-          echo "Filter JSON output: ${{ steps.filter.outputs.services_files }}"
-
       - name: Set changed services output
         id: set-changed-services
         run: |
           # Extract the list of unique service directories that have changes
           changed_files="${{ steps.filter.outputs.services_files }}"
-          echo "Changed files: $changed_files"
+          echo "Changed files JSON: $changed_files"
 
           if [ -n "$changed_files" ] && [ "$changed_files" != "null" ]; then
-            changed_services=$(echo "$changed_files" | awk -F'/' '{print $3}' | sort -u)
+            # Extract service names from the paths
+            changed_services=$(echo "$changed_files" | jq -r 'map(split("/")[2]) | unique | .[]')
           else
             changed_services=""
           fi
@@ -89,4 +86,4 @@ jobs:
             changed_services=$(echo "$changed_services" | jq -R -s -c 'split("\n")[:-1]')
           fi
 
-          echo "::set-output name=services::$changed_services"
+          echo "services=$changed_services" >> $GITHUB_ENV
