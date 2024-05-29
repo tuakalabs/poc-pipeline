@@ -1,11 +1,11 @@
 name: Main Pipeline POC
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - "backend/Services/**"
+  # push:
+  #   branches:
+  #     - main
+  #   paths:
+  #     - "backend/Services/**"
   pull_request:
     branches:
       - main
