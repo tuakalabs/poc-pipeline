@@ -71,19 +71,19 @@ jobs:
           changed_files="${{ steps.filter.outputs.services_files }}"
           echo "Changed files JSON: $changed_files"
 
-          if [ -n "$changed_files" ] && [ "$changed_files" != "null" ]; then
-            # Extract service names from the paths
-            changed_services=$(echo "$changed_files" | jq -r 'map(split("/")[2]) | unique | .[]')
-          else
-            changed_services=""
-          fi
+          # if [ -n "$changed_files" ] && [ "$changed_files" != "null" ]; then
+          #   # Extract service names from the paths
+          #   changed_services=$(echo "$changed_files" | jq -r 'map(split("/")[2]) | unique | .[]')
+          # else
+          #   changed_services=""
+          # fi
 
-          if [ -z "$changed_services" ]; then
-            echo "No services changed."
-            changed_services="[]"
-          else
-            echo "Changed services: $changed_services"
-            changed_services=$(echo "$changed_services" | jq -R -s -c 'split("\n")[:-1]')
-          fi
+          # if [ -z "$changed_services" ]; then
+          #   echo "No services changed."
+          #   changed_services="[]"
+          # else
+          #   echo "Changed services: $changed_services"
+          #   changed_services=$(echo "$changed_services" | jq -R -s -c 'split("\n")[:-1]')
+          # fi
 
           echo "services=$changed_services" >> $GITHUB_ENV
