@@ -1,4 +1,4 @@
-base_dir="./backend/Services"
+base_dir="../backend/Services"
 
 # Check if the service name argument is provided
 if [ -z "$1" ]; then
