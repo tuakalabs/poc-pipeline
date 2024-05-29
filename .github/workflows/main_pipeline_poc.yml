@@ -59,7 +59,7 @@ jobs:
         id: filter
         uses: dorny/paths-filter@v3
         with:
-          list-files: escape
+          list-files: shell
           filters: |
             services:
               - 'backend/Services/**'
