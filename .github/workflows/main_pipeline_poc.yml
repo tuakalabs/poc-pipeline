@@ -48,6 +48,7 @@ jobs:
 
   detect-changes:
     name: Detecting Changes
+    needs: setup
     runs-on: ubuntu-latest
     outputs:
       services: ${{ steps.set-changed-services.outputs.services }}
@@ -81,6 +82,7 @@ jobs:
           echo "services=$changed_services" >> $GITHUB_ENV
 
   build-docker-images:
+    name: "Build Docker Images"
     needs: detect-changes
     runs-on: ubuntu-latest
     strategy:
