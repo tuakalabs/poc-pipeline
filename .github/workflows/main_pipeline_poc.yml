@@ -64,6 +64,9 @@ jobs:
             services:
               - 'backend/Services/**'
 
+      - name: Display changed files JSON
+        run: echo ${{ steps.filter.outputs.services_files }}
+
       - name: Set changed services output
         id: set-changed-services
         run: |
