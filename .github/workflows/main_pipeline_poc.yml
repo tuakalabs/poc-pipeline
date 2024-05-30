@@ -69,21 +69,21 @@ jobs:
           # echo "services=$changed_services" >> $GITHUB_ENV
           echo "::set-output name=services::$changed_services"
 
-  debug-labels:
-    name: Debug Labels
-    runs-on: ubuntu-latest
-    needs: detect-changes
-    steps:
-      - name: Dump GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
-      - name: Get PR labels
-        id: get-pr-labels
-        run: |
-          labels="${{ join(github.event.pull_request.labels.*.name, ', ') }}"
-          echo "PR labels: $labels"
-          echo "::set-output name=labels::$labels"
+  # debug-labels:
+  #   name: Debug Labels
+  #   runs-on: ubuntu-latest
+  #   needs: detect-changes
+  #   steps:
+  #     - name: Dump GitHub context
+  #       env:
+  #         GITHUB_CONTEXT: ${{ toJson(github) }}
+  #       run: echo "$GITHUB_CONTEXT"
+  #     - name: Get PR labels
+  #       id: get-pr-labels
+  #       run: |
+  #         labels="${{ join(github.event.pull_request.labels.*.name, ', ') }}"
+  #         echo "PR labels: $labels"
+  #         echo "::set-output name=labels::$labels"
 
   build-images:
     name: Build Docker Images
