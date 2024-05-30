@@ -16,7 +16,10 @@ jobs:
     steps:
       - name: Output services
         id: set-service-output
-        run: echo "::set-output name=services::${{ fromJson(inputs.services) }}"
+        run: |
+          echo "::set-output name=services::${{ fromJson(inputs.services) }}"
+          echo ${{ fromJson(inputs.services) }}
+          echo $services
 
   build-docker-images:
     name: "Container Build Docker Images"
