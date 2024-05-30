@@ -27,9 +27,21 @@ jobs:
         run: dotnet test --no-restore --verbosity normal
         working-directory: ./backend/Services/${{ matrix.service }}
 
+      - name: Set service as output
+        id: set-service-output
+        run: echo "::set-output name=services::${{ matrix.service }}"
+
       - name: Build Docker image for ${{ matrix.service }}
         run: |
           chmod +x ./docker-build.sh
           # ./docker-build.sh ${{ matrix.service }}
           # docker push tuakalabs01/pocapp:${{ matrix.service }}
         working-directory: ./docker
+
+  run-tests:
+    name: Run Tests
+    if: ${{ success() }}
+    needs: build-docker-images
+    uses: ./.github/workflows/test_pipeline_poc.yml
+    with:
+      services: ${{ needs.set-service-output.outputs.services }}

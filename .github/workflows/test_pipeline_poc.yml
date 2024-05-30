@@ -1,19 +1,29 @@
 name: Test Pipeline POC
 
 on:
-  workflow_run:
-    workflows: ["Container Build Pipeline POC"]
-    types:
-      - completed
+  workflow_call:
+    inputs:
+      services:
+        required: true
+        type: string
 
 jobs:
   test-jobs:
     name: Test Jobs
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Read services input
+        id: read-services
+        run: |
+          services="${{ github.event.inputs.services }}"
+          echo "Services: $services"
+          echo "::set-output name=services::$services"
+
       - name: Test Step 1
-        run: echo "This test runs after the container build pipeline completes successfully"
+        run: echo "Test 1"
+
+      - name: Test Step 2
+        run: echo "Test 2"
