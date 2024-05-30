@@ -18,17 +18,17 @@ jobs:
           echo "Testing these services: $services"
 
   build-test-env:
-    name: Build Test Environment
+    name: Build test environment
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Output Images Used in Test Environment
-        run: echo "Building Test Environment with these images..."
+      - name: Deploy services
+        run: echo "Building test environment with these images..."
 
-      - name: Test Step 1
-        run: echo "Running Test 1..."
+      - name: Test step 1
+        run: echo "Running test 1..."
 
-      - name: Test Step 2
-        run: echo "Running Test 2..."
+      - name: Test step 2
+        run: echo "Running test 2..."

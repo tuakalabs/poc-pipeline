@@ -8,21 +8,21 @@ on:
         type: string
 
 jobs:
-  set-services-output:
-    name: Set services as output
+  services-to-build:
+    name: Services to build
     runs-on: ubuntu-latest
     outputs:
-      services: ${{ steps.set-service-output.outputs.services }}
+      services: ${{ steps.output-services.outputs.services }}
     steps:
       - name: Output services
-        id: set-service-output
+        id: output-services
         run: |
           services="${{ inputs.services }}"
-          echo "Services in set-services-output: $services"
+          echo "Services in services-to-build: $services"
           echo "::set-output name=services::$services"
 
   build-container-images:
-    name: "Build Container Images"
+    name: Build container images
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -40,7 +40,7 @@ jobs:
         run: dotnet test --no-restore --verbosity normal
         working-directory: ./backend/Services/${{ matrix.service }}
 
-      - name: Build Docker image for ${{ matrix.service }}
+      - name: Build container image for ${{ matrix.service }}
         run: |
           chmod +x ./docker-build.sh
           # ./docker-build.sh ${{ matrix.service }}
@@ -48,9 +48,9 @@ jobs:
         working-directory: ./docker
 
   run-tests:
-    name: Run Tests
+    name: Run tests
     if: ${{ success() }}
-    needs: [set-services-output, build-container-images]
+    needs: [services-to-build, build-container-images]
     uses: ./.github/workflows/test_pipeline_poc.yml
     with:
-      services: ${{ needs.set-services-output.outputs.services }}
+      services: ${{ needs.services-to-build.outputs.services }}

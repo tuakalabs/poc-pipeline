@@ -9,7 +9,7 @@ on:
 
 jobs:
   setup:
-    name: "Setup Pipeline"
+    name: Setup pipeline
     runs-on: ubuntu-latest
 
     steps:
@@ -34,7 +34,7 @@ jobs:
         run: echo ${{ steps.gitversion.outputs.semVer }}
 
   detect-changes:
-    name: Detect Changes
+    name: Detect changes
     needs: setup
     runs-on: ubuntu-latest
     outputs:
@@ -65,7 +65,7 @@ jobs:
           echo "::set-output name=services::$changed_services"
 
   pr-submit-label:
-    name: Build Container Images
+    name: Build container images
     if: ${{ contains(github.event.pull_request.labels.*.name, 'submit') && needs.detect-changes.outputs.services != '[]' }}
     needs: detect-changes
     uses: ./.github/workflows/container_build_pipeline_poc.yml
@@ -73,7 +73,7 @@ jobs:
       services: ${{ needs.detect-changes.outputs.services }}
 
   pr-deploy-label:
-    name: Deploy Single Service
+    name: Deploy single service
     if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
     needs: detect-changes
     uses: ./.github/workflows/single_build_deploy_pipeline_poc.yml

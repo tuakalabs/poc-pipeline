@@ -9,12 +9,12 @@ on:
 
 jobs:
   single-build-deploy:
-    name: Single Container Build and Deploy
+    name: Single container build and deploy
     runs-on: ubuntu-latest
 
     steps:
-      - name: "Single Build"
-        run: echo "Single Container Build..."
+      - name: Single build
+        run: echo "Single container build..."
 
-      - name: "Single Deploy"
-        run: echo "Single Container Deploy..."
+      - name: Single deploy
+        run: echo "Single container deploy..."
