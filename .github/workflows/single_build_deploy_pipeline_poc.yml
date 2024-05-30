@@ -13,8 +13,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Build
+      - name: "Single Build"
         run: echo "Single Container Build..."
 
-      - name: Deploy
+      - name: "Single Deploy"
         run: echo "Single Container Deploy..."
