@@ -47,7 +47,7 @@ jobs:
   run-tests:
     name: Run Tests
     if: ${{ success() }}
-    needs: build-docker-images
+    needs: [set-services-output, build-docker-images]
     uses: ./.github/workflows/test_pipeline_poc.yml
     with:
       services: ${{ needs.set-services-output.outputs.services }}
