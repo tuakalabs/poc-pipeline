@@ -8,22 +8,26 @@ on:
         type: string
 
 jobs:
-  test-jobs:
-    name: Test Jobs
+  services-to-test:
+    name: Services to test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Testing these services
+        run: |
+          echo "Testing these services: ${{ inputs.services }}"
+
+  build-test-env:
+    name: Build Test Environment
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Read services input
-        id: read-services
-        run: |
-          services="${{ github.event.inputs.services }}"
-          echo "Services: $services"
-          echo "::set-output name=services::$services"
+      - name: Output Images Used in Test Environment
+        run: echo "Building Test Environment with these images..."
 
       - name: Test Step 1
-        run: echo "Test 1"
+        run: echo "Running Test 1..."
 
       - name: Test Step 2
-        run: echo "Test 2"
+        run: echo "Running Test 2..."
