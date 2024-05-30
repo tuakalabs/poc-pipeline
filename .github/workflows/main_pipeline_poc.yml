@@ -65,7 +65,7 @@ jobs:
           echo "Changed services: $changed_services"
           echo "::set-output name=services::$changed_services"
 
-  build-images:
+  submit:
     name: Build Docker Images
     if: ${{ contains(github.event.pull_request.labels.*.name, 'submit') && needs.detect-changes.outputs.services != '[]' }}
     needs: detect-changes
@@ -73,7 +73,7 @@ jobs:
     with:
       services: ${{ needs.detect-changes.outputs.services }}
 
-  deploy-single-service:
+  deploy:
     name: Deploy Single Service
     if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
     needs: detect-changes
