@@ -30,6 +30,6 @@ jobs:
       - name: Build Docker image for ${{ matrix.service }}
         run: |
           chmod +x ./docker-build.sh
-          ./docker-build.sh ${{ matrix.service }}
+          # ./docker-build.sh ${{ matrix.service }}
           # docker push my-registry/$IMAGE_NAME:latest
         working-directory: ./docker
