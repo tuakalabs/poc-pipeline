@@ -8,6 +8,15 @@ on:
         type: string
 
 jobs:
+  set-services-output:
+    name: Set services as output
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Output services
+        id: set-service-output
+        run: echo "::set-output name=services::${{ fromJson(inputs.services) }}"
+
   build-docker-images:
     name: "Container Build Docker Images"
     runs-on: ubuntu-latest
@@ -26,10 +35,6 @@ jobs:
       - name: Test .NET for ${{ matrix.service }}
         run: dotnet test --no-restore --verbosity normal
         working-directory: ./backend/Services/${{ matrix.service }}
-
-      - name: Set service as output
-        id: set-service-output
-        run: echo "::set-output name=services::${{ matrix.service }}"
 
       - name: Build Docker image for ${{ matrix.service }}
         run: |
