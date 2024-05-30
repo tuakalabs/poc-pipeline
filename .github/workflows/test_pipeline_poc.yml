@@ -2,7 +2,7 @@ name: Post-Build Pipeline POC
 
 on:
   workflow_run:
-    workflows: ["Container Build Pipeline POC"]
+    workflows: [Container Build Pipeline POC]
     types:
       - completed
 
