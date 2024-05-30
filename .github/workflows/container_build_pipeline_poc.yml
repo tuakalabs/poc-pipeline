@@ -17,8 +17,9 @@ jobs:
       - name: Output services
         id: set-service-output
         run: |
-          echo "::set-output name=services::${{ inputs.services }}"
-          echo "Build services: ${{ inputs.services }}"
+          services="${{ inputs.services }}"
+          echo "::set-output name=services::$services"
+          echo "Services in set-services-output: $services"
 
   build-docker-images:
     name: "Container Build Docker Images"
