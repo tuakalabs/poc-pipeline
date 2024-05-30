@@ -92,3 +92,11 @@ jobs:
     uses: ./.github/workflows/container_build_pipeline_poc.yml
     with:
       services: ${{ needs.detect-changes.outputs.services }}
+
+  deploy-single-service:
+    name: Deploy Single Service
+    if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
+    needs: detect-changes
+    uses: ./.github/workflows/single_build_deploy_pipeline_poc.yml
+    with:
+      services: ${{ needs.detect-changes.outputs.services }}

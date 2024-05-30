@@ -1,0 +1,20 @@
+name: Single Container Build and Deploy Pipeline POC
+
+on:
+  workflow_call:
+    inputs:
+      services:
+        required: true
+        type: string
+
+jobs:
+  single-build-deploy:
+    name: Single Container Build and Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Build
+        run: echo "Single Container Build..."
+
+      - name: Deploy
+        run: echo "Single Container Deploy..."
