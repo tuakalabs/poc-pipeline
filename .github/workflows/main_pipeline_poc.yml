@@ -52,9 +52,6 @@ jobs:
             services:
               - 'backend/Services/**'
 
-      - name: Display changed files JSON
-        run: echo ${{ steps.filter.outputs.services_files }}
-
       - name: Set changed services output
         id: set-changed-services
         run: |
@@ -66,7 +63,6 @@ jobs:
           fi
 
           echo "Changed services: $changed_services"
-          # echo "services=$changed_services" >> $GITHUB_ENV
           echo "::set-output name=services::$changed_services"
 
   build-images:
