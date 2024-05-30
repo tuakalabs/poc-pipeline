@@ -34,7 +34,7 @@ jobs:
         run: echo ${{ steps.gitversion.outputs.semVer }}
 
   detect-changes:
-    name: Detecting Changes
+    name: Detect Changes
     needs: setup
     runs-on: ubuntu-latest
     outputs:
@@ -52,21 +52,20 @@ jobs:
             services:
               - 'backend/Services/**'
 
-      - name: Set changed services output
+      - name: Set changed services
         id: set-changed-services
         run: |
           changed_files='${{ steps.filter.outputs.services_files }}'
 
           if [ -n "$changed_files" ] && [ "$changed_files" != "null" ]; then
-            # Extract unique service names using jq (handling spaces)
+            # Extract unique service names (handling spaces)
             changed_services=$(echo "$changed_files" | jq -r '.[] | split("/")[2]' | sort -u | jq -R -s -c 'split("\n")[:-1]')
           fi
-
           echo "Changed services: $changed_services"
           echo "::set-output name=services::$changed_services"
 
   pr-submit-label:
-    name: Build Docker Images
+    name: Build Container Images
     if: ${{ contains(github.event.pull_request.labels.*.name, 'submit') && needs.detect-changes.outputs.services != '[]' }}
     needs: detect-changes
     uses: ./.github/workflows/container_build_pipeline_poc.yml

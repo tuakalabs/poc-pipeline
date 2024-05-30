@@ -21,8 +21,8 @@ jobs:
           echo "Services in set-services-output: $services"
           echo "::set-output name=services::$services"
 
-  build-docker-images:
-    name: "Container Build Docker Images"
+  build-container-images:
+    name: "Build Container Images"
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -50,7 +50,7 @@ jobs:
   run-tests:
     name: Run Tests
     if: ${{ success() }}
-    needs: [set-services-output, build-docker-images]
+    needs: [set-services-output, build-container-images]
     uses: ./.github/workflows/test_pipeline_poc.yml
     with:
       services: ${{ needs.set-services-output.outputs.services }}
