@@ -14,7 +14,8 @@ jobs:
     steps:
       - name: Testing these services
         run: |
-          echo "Testing these services: ${{ inputs.services }}"
+          services="${{ inputs.services }}"
+          echo "Testing these services: $services"
 
   build-test-env:
     name: Build Test Environment
