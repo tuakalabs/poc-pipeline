@@ -11,7 +11,8 @@ jobs:
   set-services-output:
     name: Set services as output
     runs-on: ubuntu-latest
-
+    outputs:
+      services: ${{ steps.set-service-output.outputs.services }}
     steps:
       - name: Output services
         id: set-service-output
@@ -49,4 +50,4 @@ jobs:
     needs: build-docker-images
     uses: ./.github/workflows/test_pipeline_poc.yml
     with:
-      services: ${{ needs.set-service-output.outputs.services }}
+      services: ${{ needs.set-services-output.outputs.services }}
