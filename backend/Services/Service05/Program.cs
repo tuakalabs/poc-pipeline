@@ -1,2 +1,2 @@
 ﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Service05 says Hi! 5");
+Console.WriteLine("Service05 says Hi! 2");
