@@ -31,5 +31,5 @@ jobs:
         run: |
           chmod +x ./docker-build.sh
           # ./docker-build.sh ${{ matrix.service }}
-          # docker push my-registry/$IMAGE_NAME:latest
+          # docker push tuakalabs01/pocapp:${{ matrix.service }}
         working-directory: ./docker
