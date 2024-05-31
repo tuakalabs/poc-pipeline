@@ -1,0 +1,36 @@
+# Uncomment to force version as a run once option, then comment out again - can be used on branch level also
+# next-version: 2.0.0
+assembly-versioning-scheme: MajorMinorPatch
+continuous-delivery-fallback-tag: ""
+mode: Mainline
+major-version-bump-message: '\+semver:\s?(breaking|major)'
+minor-version-bump-message: '\+semver:\s?(feature|minor)'
+patch-version-bump-message: '\+semver:\s?(fix|patch)'
+commit-message-incrementing: Enabled
+branches:
+  main:
+    tag: "main"
+    increment: Patch
+    prevent-increment-of-merged-branch-version: true
+    track-merge-target: true
+    is-mainline: true
+    is-release-branch: false
+  feat:
+    tag: "feat-{BranchName}"
+    regex: feat[/-]
+    source-branches: ["main"]
+    increment: Minor
+    tracks-release-branches: false
+    is-mainline: false
+    is-release-branch: false
+  hotfix:
+    tag: "hotfix-{BranchName}"
+    regex: hotfix[/-]
+    source-branches: ["main"]
+    increment: Patch
+    tracks-release-branches: false
+    is-mainline: false
+    is-release-branch: false
+ignore:
+  sha: []
+merge-message-formats: {}
