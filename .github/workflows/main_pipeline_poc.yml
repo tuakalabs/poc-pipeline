@@ -11,6 +11,8 @@ jobs:
   setup:
     name: Setup pipeline
     runs-on: ubuntu-latest
+    outputs:
+      build-version: ${{ steps.gitversion.outputs.semVer }}
 
     steps:
       - name: Checkout code
@@ -80,17 +82,17 @@ jobs:
   pr-submit-label:
     name: Build container images
     if: ${{ contains(github.event.pull_request.labels.*.name, 'submit') && needs.detect-changes.outputs.services != '[]' }}
-    needs: detect-changes
+    needs: [detect-changes, setup]
     uses: ./.github/workflows/container_build_pipeline_poc.yml
     with:
       services: ${{ needs.detect-changes.outputs.services }}
-      build-version: ${{ steps.gitversion.outputs.semVer }}
+      build-version: ${{ needs.setup.outputs.build-version }}
 
   pr-deploy-label:
     name: Deploy single service
     if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
-    needs: detect-changes
+    needs: [detect-changes, setup]
     uses: ./.github/workflows/single_build_deploy_pipeline_poc.yml
     with:
       services: ${{ needs.detect-changes.outputs.services }}
-      build-version: ${{ steps.gitversion.outputs.semVer }}
+      build-version: ${{ needs.setup.outputs.build-version }}
