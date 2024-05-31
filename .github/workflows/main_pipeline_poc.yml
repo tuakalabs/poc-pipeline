@@ -84,6 +84,7 @@ jobs:
     uses: ./.github/workflows/container_build_pipeline_poc.yml
     with:
       services: ${{ needs.detect-changes.outputs.services }}
+      build-version: ${{ steps.gitversion.outputs.semVer }}
 
   pr-deploy-label:
     name: Deploy single service
@@ -92,3 +93,4 @@ jobs:
     uses: ./.github/workflows/single_build_deploy_pipeline_poc.yml
     with:
       services: ${{ needs.detect-changes.outputs.services }}
+      build-version: ${{ steps.gitversion.outputs.semVer }}

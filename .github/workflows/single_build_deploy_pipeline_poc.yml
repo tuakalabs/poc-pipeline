@@ -6,6 +6,9 @@ on:
       services:
         required: true
         type: string
+      build-version:
+        required: true
+        type: string
 
 jobs:
   single-build-deploy:
@@ -14,7 +17,11 @@ jobs:
 
     steps:
       - name: Single build
-        run: echo "Single container build..."
+        run: |
+          echo "Single container build - services ${{ inputs.services }}"
+          echo "Single container build - version ${{ inputs.build-version }}"
 
       - name: Single deploy
-        run: echo "Single container deploy..."
+        run: |
+          echo "Single container deploy - services ${{ inputs.services }}"
+          echo "Single container deploy - version ${{ inputs.build-version }}"
