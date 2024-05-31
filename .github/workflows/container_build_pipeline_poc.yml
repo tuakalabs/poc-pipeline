@@ -46,8 +46,8 @@ jobs:
       - name: Build container image for ${{ matrix.service }}
         run: |
           chmod +x ./docker-build.sh
-          # ./docker-build.sh ${{ matrix.service }}
-          # docker push tuakalabs01/pocapp:${{ matrix.service }}
+          # ./docker-build.sh ${{ matrix.service }} ${{ inputs.build-version }}
+          # docker push tuakalabs01/pocapp:${{ matrix.service }}${{ inputs.build-version }}
         working-directory: ./docker
 
   run-tests:
