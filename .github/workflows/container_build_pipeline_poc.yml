@@ -47,7 +47,7 @@ jobs:
         run: |
           chmod +x ./docker-build.sh
           # ./docker-build.sh ${{ matrix.service }} ${{ inputs.build-version }}
-          # docker push tuakalabs01/pocapp:${{ matrix.service }}${{ inputs.build-version }}
+          # docker push tuakalabs01/pocapp:${{ matrix.service }}-${{ inputs.build-version }}
         working-directory: ./docker
 
   run-tests:
