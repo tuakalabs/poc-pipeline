@@ -19,6 +19,19 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
+      - name: Git Setup
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACCESSTOKEN }}
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}
+
+      - name: Rebase from main branch
+        run: |
+          git fetch origin main
+          git rebase origin/main
+
       - name: Install GitVersion
         uses: gittools/actions/gitversion/setup@v1.1.1
         with:
