@@ -16,6 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       services: ${{ steps.output-services.outputs.services }}
+      build-version: ${{ steps.output-services.outputs.build-version }}
     steps:
       - name: Output services
         id: output-services
@@ -23,6 +24,10 @@ jobs:
           services="${{ inputs.services }}"
           echo "Services in services-to-build: $services"
           echo "::set-output name=services::$services"
+
+          build-version="${{ inputs.build-version }}"
+          echo "Version: $build-version"
+          echo "::set-output name=build-version::$build-version"
 
   build-container-images:
     name: Build container images
@@ -57,3 +62,4 @@ jobs:
     uses: ./.github/workflows/test_pipeline_poc.yml
     with:
       services: ${{ needs.services-to-build.outputs.services }}
+      build-version: ${{ needs.services-to-build.outputs.build-version }}

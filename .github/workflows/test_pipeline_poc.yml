@@ -6,6 +6,9 @@ on:
       services:
         required: true
         type: string
+      build-version:
+        required: true
+        type: string
 
 jobs:
   manifest:
