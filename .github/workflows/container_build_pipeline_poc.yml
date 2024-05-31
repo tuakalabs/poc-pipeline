@@ -22,12 +22,12 @@ jobs:
         id: output-services
         run: |
           services="${{ inputs.services }}"
-          echo "Services in services-to-build: $services"
+          echo "Services to build: $services"
           echo "::set-output name=services::$services"
 
-          build-version="${{ inputs.build-version }}"
-          echo "Version: $build-version"
-          echo "::set-output name=build-version::$build-version"
+          buildversion="${{ inputs.build-version }}"
+          echo "Version tp build: $buildversion"
+          echo "::set-output name=build-version::$buildversion"
 
   build-container-images:
     name: Build container images
