@@ -1,0 +1,65 @@
+name: Container Build Pipeline POC
+
+on:
+  workflow_call:
+    inputs:
+      services:
+        required: true
+        type: string
+      build-version:
+        required: true
+        type: string
+
+jobs:
+  services-to-build:
+    name: Services to build
+    runs-on: ubuntu-latest
+    outputs:
+      services: ${{ steps.output-services.outputs.services }}
+      build-version: ${{ steps.output-services.outputs.build-version }}
+    steps:
+      - name: Output services
+        id: output-services
+        run: |
+          services="${{ inputs.services }}"
+          echo "Services to build: $services"
+          echo "::set-output name=services::$services"
+
+          buildversion="${{ inputs.build-version }}"
+          echo "Version to build: $buildversion"
+          echo "::set-output name=build-version::$buildversion"
+
+  build-container-images:
+    name: Build container images
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service: ${{ fromJson(inputs.services) }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build .NET for ${{ matrix.service }}
+        run: dotnet build
+        working-directory: ./backend/Services/${{ matrix.service }}
+
+      - name: Test .NET for ${{ matrix.service }}
+        run: dotnet test --no-restore --verbosity normal
+        working-directory: ./backend/Services/${{ matrix.service }}
+
+      - name: Build container image for ${{ matrix.service }}
+        run: |
+          chmod +x ./docker-build.sh
+          # ./docker-build.sh ${{ matrix.service }} ${{ inputs.build-version }}
+          # docker push tuakalabs01/pocapp:${{ matrix.service }}-${{ inputs.build-version }}
+        working-directory: ./docker
+
+  run-tests:
+    name: Run tests
+    if: ${{ success() }}
+    needs: [services-to-build, build-container-images]
+    uses: ./.github/workflows/4test_pipeline_poc.yml
+    with:
+      services: ${{ needs.services-to-build.outputs.services }}
+      build-version: ${{ needs.services-to-build.outputs.build-version }}

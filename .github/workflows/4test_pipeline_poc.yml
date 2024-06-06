@@ -1,0 +1,55 @@
+name: Test Pipeline POC
+
+on:
+  workflow_call:
+    inputs:
+      services:
+        required: true
+        type: string
+      build-version:
+        required: true
+        type: string
+
+jobs:
+  manifest:
+    name: Manifest Setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get services for manifest
+        run: |
+          services="${{ inputs.services }}"
+          echo "Services for manifest: $services"
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create manifest
+        run: |
+          echo "Creating manifest..."
+
+      - name: Store manifest as GH artifact
+        run: |
+          echo "Storing manifest as GH artifact..."
+
+  build-env-from-manifest:
+    name: Build environment from manifest
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy services
+        run: echo "Building test environment with these images..."
+
+  test-env-with-manifest:
+    name: Test environment built with manifest
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Test step 1
+        run: echo "Running test 1..."
+
+      - name: Test step 2
+        run: echo "Running test 2..."
